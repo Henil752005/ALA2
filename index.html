@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Letter Animation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #282c34;
+      color: white;
+      text-align: center;
+      padding: 0 20px; /* Padding for small screens */
+    }
+
+    .word-container {
+      font-size: 5vw; /* Responsive base font size */
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .letter {
+      opacity: 0;
+      font-size: inherit;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .letter.active {
+      opacity: 1;
+      transform: scale(1.2); /* Zoom in effect on active letter */
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 18px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (min-width: 768px) {
+      .word-container {
+        font-size: 4vw; /* Adjust font size for tablets and up */
+      }
+
+      button {
+        font-size: 20px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .word-container {
+        font-size: 3vw; /* Smaller font size for desktops */
+      }
+
+      button {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="word-container" id="wordContainer">
+    <!-- Letters will be dynamically added here -->
+  </div>
+
+  <button id="startButton" onclick="startAnimation()">Start Animation</button>
+
+  <script>
+    const word = "HENIL VAGHANI"; // Text to animate
+    const wordContainer = document.getElementById('wordContainer');
+    let intervalId = null;
+
+    // Create span elements for each letter
+    for (let i = 0; i < word.length; i++) {
+      const span = document.createElement('span');
+      span.textContent = word[i] === ' ' ? '\u00A0' : word[i]; // Add non-breaking space for spaces
+      span.classList.add('letter');
+      wordContainer.appendChild(span);
+    }
+
+    let index = 0;
+    // Function to animate letters one by one
+    function animateLetters() {
+      const letters = document.querySelectorAll('.letter');
+      letters.forEach((letter) => letter.classList.remove('active')); // Reset all letters
+
+      letters[index].classList.add('active'); // Activate the current letter
+      index = (index + 1) % letters.length; // Move to the next letter
+    }
+
+    // Function to start the animation when the button is clicked
+    function startAnimation() {
+      if (intervalId === null) {
+        intervalId = setInterval(animateLetters, 500); // Animate every 500ms
+        document.getElementById('startButton').disabled = true; // Disable button after start
+      }
+    }
+  </script>
+</body>
+</html>
